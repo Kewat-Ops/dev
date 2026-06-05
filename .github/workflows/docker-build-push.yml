@@ -1,0 +1,140 @@
+name: docker-build-push
+
+on:
+  push:
+    branches: [srijan]
+
+jobs:
+
+  docker-build-push:
+    runs-on: self-hosted
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+# setting up buildx environment
+      - name: setting up buildx
+        uses: docker/setup-buildx-action@v2
+
+#setting docker login environment
+      - name: setting docker login environment
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+#setting docker build-push environment
+      - name: setting docker build-push python-image enviornment
+        uses: docker/build-push-action@v4
+        with:
+          context: ./python-dir
+          file: dockerfile-python
+          push: true
+          load: true
+          tags: |
+            docker ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
+            docker ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
+          platforms: linux/amd64, linux/arm64
+
+# python-imgae scanning for vulnerabilities for issue
+      - name: Scanning python images
+        uses: aquasecurity/trivy-action@v0.2.0
+        with:
+          image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-python:latest
+          severity: HIGH, CRITICAL
+
+# Testing & promoting python-image stable for production ready & safety from broken builds
+      - name: Testing python container
+        run: |
+          cd python-dir
+          pip install -r requirements.txt
+          pip install pytest
+          pytest tests
+
+      #pulling python images instead of building existing images
+      - name: Pulling python images
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
+
+      - name: promoting stable python image & broken builds safety
+        if: success()
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-python:latest${{ secrets.DOCKER_USERNAME }}/dev-python:stable
+          docker push ${{ secrets.DOCKER_USERNAME }}/dev-python:stable
+
+#setting docker build-push environment
+      - name: setting docker build-push node-image enviornment
+        uses: docker/build-push-action@v4
+        with:
+          context: ./node-dir
+          file: dockerfile-node
+          push: true
+          load: true
+          tags: |
+            docker ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
+            docker ${{ secrets.DOCKER_USERNAME }}/dev-node:${{ github.sha }}
+          platforms: linux/amd64, linux/arm64
+
+# node-imgae scanning for vulnerabilities for issue
+      - name: Scanning node images
+        uses: aquasecurity/trivy-action@v0.2.0
+        with:
+          image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-node:latest
+          severity: HIGH, CRITICAL
+
+# Testing & promoting node-image stable for production ready & safety from broken builds
+      - name: Testing node container
+        run: |
+          cd node-dir
+          npm install
+          npm test
+
+      #pulling python node instead of building existing images
+      - name: Pulling node images
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
+
+      - name: promoting stable node image & broken builds safety
+        if: success()
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-node:latest${{ secrets.DOCKER_USERNAME }}/dev-node:stable
+          docker push ${{ secrets.DOCKER_USERNAME }}/dev-node:stable
+
+#setting docker build-push environment
+      - name: setting docker build-push go-image enviornment
+        uses: docker/build-push-action@v4
+        with:
+          context: ./go-dir
+          file: dockerfile-go
+          push: true
+          load: true
+          tags: |
+            docker ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
+            docker ${{ secrets.DOCKER_USERNAME }}/dev-go:${{ github.sha }}
+          platforms: linux/amd64, linux/arm64
+
+# go-imgae scanning for vulnerabilities for issue
+      - name: Scanning go images
+        uses: aquasecurity/trivy-action@v0.2.0
+        with:
+          image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-go:latest
+          severity: HIGH, CRITICAL
+
+# Testing & promoting go-image stable for production ready & safety from broken builds
+      - name: Testing go container
+        run: |
+          cd go-dir
+          go test ./...
+
+      #pulling python images instead of building existing images
+      - name: Pulling python images
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
+
+      - name: promoting stable go image & broken builds safety
+        if: success()
+        run: |
+          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-go:latest${{ secrets.DOCKER_USERNAME }}/dev-go:stable
+          docker push ${{ secrets.DOCKER_USERNAME }}/dev-go:stable
