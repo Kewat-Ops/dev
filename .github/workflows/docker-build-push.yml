@@ -34,7 +34,6 @@ jobs:
           context: ./python-dir
           file: dockerfile-python
           push: true
-          load: true
           tags: |
             docker ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
             docker ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
@@ -73,7 +72,6 @@ jobs:
           context: ./node-dir
           file: dockerfile-node
           push: true
-          load: true
           tags: |
             docker ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
             docker ${{ secrets.DOCKER_USERNAME }}/dev-node:${{ github.sha }}
@@ -111,7 +109,6 @@ jobs:
           context: ./go-dir
           file: dockerfile-go
           push: true
-          load: true
           tags: |
             docker ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
             docker ${{ secrets.DOCKER_USERNAME }}/dev-go:${{ github.sha }}
