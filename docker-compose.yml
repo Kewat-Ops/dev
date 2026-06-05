@@ -1,0 +1,72 @@
+networks:
+  devops-net:
+    driver: bridge
+
+services:
+
+  python-service:
+    build:
+      context: ./python-dir
+      file: dockerfile-python
+    container_name: python-container
+    ports:
+      - "5000:5000"
+#checking python container health
+    Healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      intervals: 30s
+      timeout: 10s
+      retries: 2
+
+    networks:
+      - devops-net
+
+  node-service:
+      context: ./node-dir
+      file: dockerfile-node
+    container_name: node-container
+    ports:
+      - "3000:3000"
+#checking python container health
+    Healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      intervals: 30s
+      timeout: 10s
+      retries: 2
+
+    networks:
+      - devops-net
+
+  go-service:
+      context: ./go-dir
+      file: dockerfile-go
+    container_name: go-container
+    ports:
+      - "8000:8000"
+#checking go container health
+    Healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      intervals: 30s
+      timeout: 10s
+      retries: 2
+
+    networks:
+      - devops-net
+
+  nginx-proxy:
+    imgae: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      python-service:
+        condition: service_healthy
+      node-service:
+        condition: service_healthy
+      go-service:
+        condition: service_healthy
+
+    networks:
+      - devops-net

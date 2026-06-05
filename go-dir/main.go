@@ -10,7 +10,7 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    http.HandleFunc("/", helloHandler)
+    http.HandleFunc("/go", helloHandler)
     fmt.Println("Server running on port 8000")
     http.ListenAndServe("0.0.0.0:8000", nil)
 }
