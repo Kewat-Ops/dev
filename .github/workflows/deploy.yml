@@ -1,4 +1,4 @@
-name: Deployment
+name: Deployment phase
 
 on:
   workflow_run:
@@ -20,7 +20,8 @@ jobs:
 #synchronization branches
       - name: synchronization with branches
         run: |
-        git checkout master && git pull hp srijan && git push hp master && git checkout srijan
+          cd storage/dev
+          git checkout master && git pull hp srijan && git push hp master && git checkout srijan
 
       - name: deploying code
         run: |
