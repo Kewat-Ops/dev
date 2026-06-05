@@ -1,9 +1,10 @@
 # Stage 1 - Tester
 
-FROM python:3.12 As tester
+FROM python:3.12 AS tester
 WORKDIR /docker-project
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip wheel setuptools \
+    && pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # stage 2- Runtime
@@ -12,6 +13,7 @@ WORKDIR /docker-project
 COPY requirements.txt .
 RUN apt-get update && apt-get install -y curl \
     && rm -rf /var/lib/apt/lists/* \
+    && pip install --upgrade pip wheel setuptools \
     && pip install --no-cache-dir -r requirements.txt
 COPY . .
 CMD ["python", "script.py"]
