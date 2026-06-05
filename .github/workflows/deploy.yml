@@ -26,7 +26,9 @@ jobs:
           docker pull ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
           docker pull ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
           echo -e "Successfully pulled images..."
-          echo -e "Composing docker files....\n initializing....."
+          echo -e "Composing docker files....\nInitializing & untag unused images....."
+          docker image prune -f
+          echo -e "Succesfully untagged unused images...\nStart composing files..."
           docker compose -f docker-compose.yml up -d --remove-orphans
 
 # Zero-downtime (Automated roll back ) & scaling
@@ -35,13 +37,13 @@ jobs:
           for SVC in python-service node-service go-service; do
             status=$(docker inspect --format='${{ .State.Health.Status}}' $(docker ps -q -f name=$SVC))
             if [[ '$status' != "\"healthy\"" ]]; then
-              echo " $SVC is unhealthy\nRolling back to stable..."
+              echo -e " $SVC is unhealthy\nRolling back to stable..."
               docker compose -f docker-compose.yml down -d
               docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
               # scaling container
               docker compose -f docker-compose.yml up -d --scale ${SVC}=2
             else
-              echo "$SVC container is healthy"
+              echo -e "$SVC container is healthy"
             fi
           done
 
