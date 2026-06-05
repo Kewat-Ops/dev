@@ -32,7 +32,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./python-dir
-          file: dockerfile-python
+          file: ./python-dir/dockerfile-python
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
@@ -70,7 +70,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./node-dir
-          file: dockerfile-node
+          file: ./node-dir/dockerfile-node
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
@@ -107,7 +107,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./go-dir
-          file: dockerfile-go
+          file: ./go-dir/dockerfile-go
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
