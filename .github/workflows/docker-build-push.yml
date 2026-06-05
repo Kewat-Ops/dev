@@ -17,6 +17,8 @@ jobs:
 # setting up buildx environment
       - name: setting up buildx
         uses: docker/setup-buildx-action@v2
+        with:
+          driver: docker
 
 #setting docker login environment
       - name: setting docker login environment
