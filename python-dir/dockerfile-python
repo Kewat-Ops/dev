@@ -1,0 +1,15 @@
+# Stage 1 - Tester
+
+FROM python:3.19 as tester
+WORKDIR /docker-project
+COPY requirements.txt .
+RUN pip install -r reuirements.txt
+COPY . .
+
+# stage 2- Runtime
+FROM python:3.19-slim
+WORKDIR /docker-project
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/list/*
+CMD ["python", "script.py"]
