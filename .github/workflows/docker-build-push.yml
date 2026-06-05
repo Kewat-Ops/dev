@@ -35,8 +35,8 @@ jobs:
           file: dockerfile-python
           push: true
           tags: |
-            docker ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
-            docker ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
+            ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
           platforms: linux/amd64, linux/arm64
 
 # python-imgae scanning for vulnerabilities for issue
@@ -73,8 +73,8 @@ jobs:
           file: dockerfile-node
           push: true
           tags: |
-            docker ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
-            docker ${{ secrets.DOCKER_USERNAME }}/dev-node:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
+            ${{ secrets.DOCKER_USERNAME }}/dev-node:${{ github.sha }}
           platforms: linux/amd64, linux/arm64
 
 # node-imgae scanning for vulnerabilities for issue
@@ -110,8 +110,8 @@ jobs:
           file: dockerfile-go
           push: true
           tags: |
-            docker ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
-            docker ${{ secrets.DOCKER_USERNAME }}/dev-go:${{ github.sha }}
+            ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
+            ${{ secrets.DOCKER_USERNAME }}/dev-go:${{ github.sha }}
           platforms: linux/amd64, linux/arm64
 
 # go-imgae scanning for vulnerabilities for issue
