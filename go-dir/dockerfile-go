@@ -10,5 +10,5 @@ RUN go build -o main .
 FROM debian:bookworm-slim
 WORKDIR /docker-project
 COPY --from=builder /docker-project/main .
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/list/*
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 CMD ["./main"]
