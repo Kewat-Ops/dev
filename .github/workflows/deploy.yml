@@ -40,7 +40,7 @@ jobs:
       - name: rolling back to stable & scaling container
         run: |
           for SVC in python-service node-service go-service; do
-            status=$(docker inspect --format='${{ .State.Health.Status}}' $(docker ps -q -f name=$SVC))
+            status=$(docker inspect --format='${{json .State.Health.Status}}' $(docker ps -q -f name=$SVC))
             if [[ '$status' != "\"healthy\"" ]]; then
               echo -e " $SVC is unhealthy\nRolling back to stable..."
               docker compose -f docker-compose.yml down -d
