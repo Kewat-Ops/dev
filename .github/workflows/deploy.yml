@@ -58,5 +58,7 @@ jobs:
     if: failure()
     steps:
       - uses: actions/checkout@v4
+
       - name: sending message
-        run: echo -e "Deployment has been failed on:\nBranch: ${{ github.ref }}"
+        run: |
+          echo -e "Deployment has been failed on:\nBranch: ${{ github.ref }}"
