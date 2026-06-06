@@ -11,7 +11,7 @@ services:
     container_name: python-container
     ports:
       - "5000:5000"
-#checking python container health
+#checking python-container health
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000"]
       interval: 30s
