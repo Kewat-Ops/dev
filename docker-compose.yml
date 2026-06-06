@@ -13,7 +13,7 @@ services:
       - "5000:5000"
 #checking python-container health
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/python"]
       interval: 30s
       timeout: 10s
       retries: 2
@@ -29,7 +29,7 @@ services:
       - "3000:3000"
 #checking node-container health
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/node"]
       interval: 30s
       timeout: 10s
       retries: 2
@@ -45,7 +45,7 @@ services:
       - "8000:8000"
 #checking go-container health
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/go"]
       interval: 30s
       timeout: 10s
       retries: 2
