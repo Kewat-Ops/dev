@@ -27,7 +27,7 @@ services:
     container_name: node-container
     ports:
       - "3000:3000"
-#checking python container health
+#checking node-container health
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
@@ -43,7 +43,7 @@ services:
     container_name: go-container
     ports:
       - "8000:8000"
-#checking go container health
+#checking go-container health
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
       interval: 30s
