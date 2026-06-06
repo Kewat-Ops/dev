@@ -14,6 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+#setting up QEMU action for supporting platforms
+      - name: Setting up QEMU actions
+        uses: docker/setup-qemu-action@v3
+
 # setting up buildx environment
       - name: setting up buildx
         uses: docker/setup-buildx-action@v2
