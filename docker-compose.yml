@@ -7,54 +7,53 @@ services:
   python-service:
     build:
       context: ./python-dir
-      file: dockerfile-python
+      dockerfile: dockerfile-python
     container_name: python-container
     ports:
       - "5000:5000"
 #checking python container health
-    Healthcheck:
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000"]
-      intervals: 30s
+      interval: 30s
       timeout: 10s
       retries: 2
-
     networks:
       - devops-net
 
   node-service:
+    build:
       context: ./node-dir
-      file: dockerfile-node
+      dockerfile: dockerfile-node
     container_name: node-container
     ports:
       - "3000:3000"
 #checking python container health
-    Healthcheck:
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      intervals: 30s
+      interval: 30s
       timeout: 10s
       retries: 2
-
     networks:
       - devops-net
 
   go-service:
+    build:
       context: ./go-dir
-      file: dockerfile-go
+      dockerfile: dockerfile-go
     container_name: go-container
     ports:
       - "8000:8000"
 #checking go container health
-    Healthcheck:
+    healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000"]
-      intervals: 30s
+      interval: 30s
       timeout: 10s
       retries: 2
-
     networks:
       - devops-net
 
   nginx-proxy:
-    imgae: nginx:latest
+    image: nginx:latest
     container_name: nginx-proxy
     ports:
       - "80:80"
@@ -67,6 +66,5 @@ services:
         condition: service_healthy
       go-service:
         condition: service_healthy
-
     networks:
       - devops-net
