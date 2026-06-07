@@ -22,7 +22,14 @@ jobs:
 #synchronization branches
       - name: synchronization with branches
         run: |
-          git checkout master && git pull hp srijan && git push hp master && git checkout srijan
+          #fetching all branch to git runner to see locally
+          git fetch --all
+          #checking all fetched branch or confirming it
+          git branch -a
+          git checkout master
+          git pull hp srijan
+          git push hp master
+          git checkout srijan
 
       - name: deploying code
         run: |
