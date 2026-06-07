@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-#setting up QEMU actions for supported platforms
+# setting up QEMU actions for supported platforms
       #- name: setting up QEMU action
        # uses: docker/setup-qemu-action@v3
 
