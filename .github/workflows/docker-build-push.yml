@@ -51,7 +51,7 @@ jobs:
 
           # using cache for image layers
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-python:cache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-python:cache,mode=max
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-python:cache,mode=min
 
           platforms: linux/amd64, linux/arm64
 
@@ -95,7 +95,7 @@ jobs:
 
           # using cache for image layers
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-node:cache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-node:cache,mode=max
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-node:cache,mode=min
 
           platforms: linux/amd64, linux/arm64
 
@@ -138,7 +138,7 @@ jobs:
 
           # using cache for image layers
           cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-go:cache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-go:cache,mode=max
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-go:cache,mode=min
 
           platforms: linux/amd64, linux/arm64
 
