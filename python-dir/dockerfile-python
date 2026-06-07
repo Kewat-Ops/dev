@@ -3,9 +3,7 @@ FROM python:3.12 AS tester
 WORKDIR /docker-project
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-RUN pip install -r requirements.txt pytest
 COPY . .
-CMD ["pytest", "tests"]
 
 #stage 2-Runtime
 FROM python:3.12-slim

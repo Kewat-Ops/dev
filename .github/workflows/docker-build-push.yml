@@ -65,11 +65,11 @@ jobs:
 # Testing & promoting python-image stable for production ready & safety from broken builds
       - name: Testing python container
         run: |
-          #cd python-dir
-          #pip install -r requirements.txt
-          #pip install pytest
-          #pytest tests
-          docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-python:latest pytest
+          cd python-dir
+          pip install -r requirements.txt
+          pip install pytest
+          pytest tests
+          #docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-python:latest pytest
 
       #pulling python images instead of building existing images
       - name: Pulling python images
@@ -109,10 +109,10 @@ jobs:
 # Testing & promoting node-image stable for production ready & safety from broken builds
       - name: Testing node container
         run: |
-          #cd node-dir
-          #npm install
-          #npm test
-          docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-node:latest npm test
+          cd node-dir
+          npm install
+          npm test
+          #docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-node:latest npm test
 
       #pulling python node instead of building existing images
       - name: Pulling node images
@@ -152,9 +152,9 @@ jobs:
 # Testing & promoting go-image stable for production ready & safety from broken builds
       - name: Testing go container
         run: |
-          #cd go-dir
-          #go test ./...
-          docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-go:latest go test ./...
+          cd go-dir
+          go test ./...
+          #docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-go:latest go test ./...
 
       #pulling python images instead of building existing images
       - name: Pulling python images
