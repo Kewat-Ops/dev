@@ -22,7 +22,6 @@ jobs:
 #synchronization branches
       - name: synchronization with branches
         run: |
-          cd storage/dev/
           git checkout master && git pull hp srijan && git push hp master && git checkout srijan
 
       - name: deploying code
