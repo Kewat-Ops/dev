@@ -20,19 +20,19 @@ jobs:
       - uses: actions/checkout@v4
 
 #synchronization branches
-      - name: synchronization with branches
-        run: |
+      #- name: synchronization with branches
+       # run: |
           #fetching all branch to git runner to see locally
-          git fetch --all
+        #  git fetch --all
           #checking all fetched branch or confirming it
-          git branch -a
-          git checkout master
+         # git branch -a
+          #git checkout master
           # since git runner didnt recognize "hp" remote we use standard <origin>, for custom we need to define "hp"
           # git remote add hp git@github.com:Kewat-Ops/dev.git (for SSH)
           # git fetch hp
-          git pull origin srijan
-          git push origin master
-          git checkout srijan
+          #git pull origin srijan
+          #git push origin master
+          #git checkout srijan
 
       - name: deploying code
         run: |
