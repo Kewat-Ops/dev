@@ -14,6 +14,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+# installing dependencies cause its bare VM ubuntu
+      - name: Installing python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Installing node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Installing go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
 #setting up the library QEMU actions for supported platforms
       #- name: setting up QEMU action
        # uses: docker/setup-qemu-action@v3
