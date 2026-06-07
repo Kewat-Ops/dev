@@ -12,11 +12,11 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     steps:
-      #- uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
 #setting up QEMU actions for supported platforms
-      -name: setting up QEMU action
-       uses: docker/setup-qemu-action@v3
+      - name: setting up QEMU action
+        uses: docker/setup-qemu-action@v3
 
 # setting up buildx environment
       - name: setting up buildx
