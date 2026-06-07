@@ -39,11 +39,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
 
 # python-imgae scanning for vulnerabilities for issue
       - name: Scanning python images
-        uses: aquasecurity/trivy-action@v0.2.0
+        uses: aquasecurity/trivy-action@v0.20.0
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-python:latest
           severity: HIGH, CRITICAL
@@ -64,7 +64,7 @@ jobs:
       - name: promoting stable python image & broken builds safety
         if: success()
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-python:latest${{ secrets.DOCKER_USERNAME }}/dev-python:stable
+          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-python:latest ${{ secrets.DOCKER_USERNAME }}/dev-python:stable
           docker push ${{ secrets.DOCKER_USERNAME }}/dev-python:stable
 
 #setting docker build-push environment
@@ -77,11 +77,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-node:${{ github.sha }}
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
 
 # node-imgae scanning for vulnerabilities for issue
       - name: Scanning node images
-        uses: aquasecurity/trivy-action@v0.2.0
+        uses: aquasecurity/trivy-action@v0.20.0
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-node:latest
           severity: HIGH, CRITICAL
@@ -101,7 +101,7 @@ jobs:
       - name: promoting stable node image & broken builds safety
         if: success()
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-node:latest${{ secrets.DOCKER_USERNAME }}/dev-node:stable
+          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-node:latest ${{ secrets.DOCKER_USERNAME }}/dev-node:stable
           docker push ${{ secrets.DOCKER_USERNAME }}/dev-node:stable
 
 #setting docker build-push environment
@@ -114,11 +114,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-go:${{ github.sha }}
-          platforms: linux/amd64, linux/arm64
+          platforms: linux/amd64
 
 # go-imgae scanning for vulnerabilities for issue
       - name: Scanning go images
-        uses: aquasecurity/trivy-action@v0.2.0
+        uses: aquasecurity/trivy-action@v0.20.0
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-go:latest
           severity: HIGH, CRITICAL
@@ -137,5 +137,5 @@ jobs:
       - name: promoting stable go image & broken builds safety
         if: success()
         run: |
-          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-go:latest${{ secrets.DOCKER_USERNAME }}/dev-go:stable
+          docker tag ${{ secrets.DOCKER_USERNAME }}/dev-go:latest ${{ secrets.DOCKER_USERNAME }}/dev-go:stable
           docker push ${{ secrets.DOCKER_USERNAME }}/dev-go:stable
