@@ -24,7 +24,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{'**/requirements.txt'}}
+          key: ${{ runner.os }}-pip-${{hashFiles'**/requirements.txt'}}
           restore-keys: ${{ runner.os }}-pip-
 
 # setting up buildx environment
@@ -48,6 +48,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
+
+          # using cache for image layers
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-python:cache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-python:cache,mode=max
+
           platforms: linux/amd64, linux/arm64
 
 # python-imgae scanning for vulnerabilities for issue
@@ -87,6 +92,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-node:${{ github.sha }}
+
+          # using cache for image layers
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-node:cache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-node:cache,mode=max
+
           platforms: linux/amd64, linux/arm64
 
 # node-imgae scanning for vulnerabilities for issue
@@ -125,6 +135,11 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-go:${{ github.sha }}
+
+          # using cache for image layers
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-go:cache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/dev-go:cache,mode=max
+
           platforms: linux/amd64, linux/arm64
 
 # go-imgae scanning for vulnerabilities for issue
