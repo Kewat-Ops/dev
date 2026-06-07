@@ -50,7 +50,7 @@ jobs:
 # Zero-downtime (Automated roll back ) & scaling
       - name: rolling back to stable & scaling container
         run: |
-          for SVC in python-service node-service go-service; do
+          for SVC in python-container node-container go-container; do
             status=$(docker inspect --format='{{json .State.Health.Status}}' $(docker ps -q -f name=$SVC))
             if [[ '$status' != "\"healthy\"" ]]; then
               echo -e " $SVC is unhealthy\nRolling back to stable..."
