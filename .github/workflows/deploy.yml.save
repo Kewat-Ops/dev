@@ -1,4 +1,4 @@
-  name: Deployment phase
+name: Deployment phase
 
 on:
   push:
@@ -48,27 +48,18 @@ jobs:
           docker compose -f docker-compose.yml up -d --remove-orphans
 
 # Zero-downtime (Automated roll back ) & scaling
-      - name: Rolling back & scaling container on Health failure
+      - name: rolling back to stable & scaling container
         run: |
-          #here in loops we should use image name not container or service (${{}}/dev-python,${{}}/dev-node, ${{}}/dev-go)
-          for SVC in python node go; do
-            # Logic for finding container id
-            $cid=$(docker ps -q -f "label=com.docker.compose.service=$SVC-service")
-            # this logic checks if container id is found/running or empty (-n: non-empty, -z: empty) 
-            if [-n "$cid"]; then
-              # Logic for checking container health
-              status=$(docker inspect --format='{{json .State.Health.Status}}' $cid)
-              if [[ '$status' != "\"healthy\"" ]]; then
-                echo -e " $SVC is unhealthy\nRolling back to stable..."
-                docker compose -f docker-compose.yml down
-                docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
-                # scaling container
-                docker compose -f docker-compose.yml up -d --scale ${SVC}=2
-              else
-                echo -e "$SVC container is healthy"
-              fi
+          for SVC in python-container node-container go-container; do
+            status=$(docker inspect --format='{{json .State.Health.Status}}' $(docker ps -q -f name=$SVC))
+            if [[ '$status' != "\"healthy\"" ]]; then
+              echo -e " $SVC is unhealthy\nRolling back to stable..."
+              docker compose -f docker-compose.yml down
+              docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
+              # scaling container
+              docker compose -f docker-compose.yml up -d --scale ${SVC}=2
             else
-              echo -e "$SVC-container is not running"
+              echo -e "$SVC container is healthy"
             fi
           done
 
