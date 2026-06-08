@@ -1,19 +1,19 @@
 name: Deployment phase
 
 on:
-  push:
-    branches: [srijan]
-    #workflow_run:
-     # workflows: ["docker-build-push"]
-      #type: [completed]
-    #workflow_dispatch:
+#push:
+#branches: [srijan]
+  workflow_run:
+    workflows: ["docker-build-push"]
+    type: [completed]
+  workflow_dispatch:
 
 
 jobs:
 
   deployment-phase:
     runs-on: ubuntu-latest
- #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     steps:
