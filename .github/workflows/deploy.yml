@@ -53,12 +53,12 @@ jobs:
           #here in loops we should use image name not container or service (${{}}/dev-python,${{}}/dev-node, ${{}}/dev-go)
           for SVC in python node go; do
             # Logic for finding container id
-            $cid=$(docker ps -q -f "label=com.docker.compose.service=$SVC-service")
+            cid=$(docker ps -q -f "label=com.docker.compose.service=$SVC-service")
             # this logic checks if container id is found/running or empty (-n: non-empty, -z: empty) 
-            if [-n "$cid"]; then
+            if [ -n "$cid" ]; then
               # Logic for checking container health
               status=$(docker inspect --format='{{json .State.Health.Status}}' $cid)
-              if [[ '$status' != "\"healthy\"" ]]; then
+              if [[ "$status" != "\"healthy\"" ]]; then
                 echo -e " $SVC is unhealthy\nRolling back to stable..."
                 docker compose -f docker-compose.yml down
                 docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
