@@ -1,4 +1,4 @@
-  name: Deployment phase
+name: Deployment phase
 
 on:
   push:
