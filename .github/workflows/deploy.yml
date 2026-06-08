@@ -60,10 +60,11 @@ jobs:
               status=$(docker inspect --format='{{json .State.Health.Status}}' $cid)
               if [[ "$status" != "\"healthy\"" ]]; then
                 echo -e " $SVC is unhealthy\nRolling back to stable..."
-                docker compose -f docker-compose.yml down
+                # restart only the failing services,not whole stack (-s: stop, -f: force removal)
+                docker compose rm -sf ${SVC}-service
                 docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
-                # scaling container
-                docker compose -f docker-compose.yml up -d --scale ${SVC}=2
+                # scaling container, brings service back with 2 replicas
+                docker compose -f docker-compose.yml up -d --scale ${SVC}-service=2
               else
                 echo -e "$SVC container is healthy"
               fi
