@@ -62,7 +62,7 @@ jobs:
         with:
           go-version: '1.23'
 
-#setting up the library QEMU actions for supported platforms
+# setting up the library QEMU actions for supported platforms
       - name: setting up QEMU action
         uses: docker/setup-qemu-action@v3
         with:
