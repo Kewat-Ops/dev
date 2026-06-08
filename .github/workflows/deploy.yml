@@ -50,7 +50,7 @@ jobs:
 # Zero-downtime (Automated roll back ) & scaling
       - name: Rolling back & scaling container on Health failure
         run: |
-          #here in loops we should use image name not container or service (${{}}/dev-python,${{}}/dev-node, ${{}}/dev-go)
+          #here in loops we should use image name not container or service (docker_user/dev-python:dev-node:dev-go)
           for SVC in python node go; do
             # Logic for finding container id
             cid=$(docker ps -q -f "label=com.docker.compose.service=$SVC-service")
