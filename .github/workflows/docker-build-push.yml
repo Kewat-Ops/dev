@@ -1,6 +1,5 @@
 name: docker-build-push
 
-on:
 jobs:
 
   docker-build-push:
