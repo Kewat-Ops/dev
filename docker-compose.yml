@@ -8,7 +8,7 @@ services:
     build:
       context: ./python-dir
       dockerfile: dockerfile-python
-    #container_name: python-container
+    container_name: python-container
     ports:
       - "5000:5000"
 #checking python-container health
@@ -24,7 +24,7 @@ services:
     build:
       context: ./node-dir
       dockerfile: dockerfile-node
-    #container_name: node-container
+    container_name: node-container
     ports:
       - "3000:3000"
 #checking node-container health
@@ -40,7 +40,7 @@ services:
     build:
       context: ./go-dir
       dockerfile: dockerfile-go
-    #container_name: go-container
+    container_name: go-container
     ports:
       - "8000:8000"
 #checking go-container health
@@ -54,9 +54,9 @@ services:
 
   nginx-proxy:
     image: nginx:latest
-    #container_name: nginx-proxy
+    container_name: nginx-proxy
     profiles: ["runner"]
-    network_mode: host
+    #network_mode: host
     ports:
       - "80:80"
     volumes:
