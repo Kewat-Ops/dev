@@ -15,10 +15,18 @@ jobs:
     #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
     steps:
       - uses: actions/checkout@v4
 
-# synchronizing branches
+      #Github requires SSH key to pull & push between repo branches( called deploy key)
+      - name: Github handeling SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+
+      # synchronizing branches
       - name: synchronization with branches
         run: |
           cd ~/storage/dev
