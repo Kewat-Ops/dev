@@ -1,8 +1,8 @@
 name: docker-build-push
 
 on:
-  push:
-    #branches: [srijan]
+  #push:
+    #branches: [-]
 
 jobs:
 
