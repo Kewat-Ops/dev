@@ -32,7 +32,7 @@ jobs:
           cd ~/storage/dev
           #fetching all branch to git runner to see locally
           git fetch --all
-          #checking all fetched branch or confirming it
+           #checking all fetched branch or confirming it
           git branch -a
           git checkout master
           # since git runner didnt recognize "hp" remote we use standard <origin>, for custom we need to define "hp"
