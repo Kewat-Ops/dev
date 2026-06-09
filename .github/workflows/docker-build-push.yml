@@ -96,6 +96,7 @@ jobs:
           context: ./python-dir
           file: ./python-dir/dockerfile-python
           push: true
+          load: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
