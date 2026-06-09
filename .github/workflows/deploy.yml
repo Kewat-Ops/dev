@@ -3,10 +3,10 @@ name: Deployment phase
 on:
   push:
     branches: [srijan]
-  #workflow_run:
-   # workflows: ["docker-build-push"]
+   #workflow_run:
+    # workflows: ["docker-build-push"]
     #type: [completed]
-  #workflow_dispatch:
+   #workflow_dispatch:
 
 
 jobs:
