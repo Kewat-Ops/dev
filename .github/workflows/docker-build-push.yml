@@ -121,11 +121,11 @@ jobs:
 # Testing & promoting python-image stable for production ready & safety from broken builds
       - name: Testing python container
         run: |
-          cd python-dir
-          pip install -r requirements.txt
-          pip install pytest
-          pytest tests
-          #docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-python:latest pytest
+          #cd python-dir
+          #pip install -r requirements.txt
+          #pip install pytest
+          #pytest tests
+          docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-python:latest pytest
 
       #pulling python images instead of building existing images
       - name: Pulling python images
