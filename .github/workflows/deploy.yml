@@ -29,12 +29,6 @@ jobs:
       # synchronizing branches
       - name: synchronization with branches
         run: |
-<<<<<<< HEAD
-          cd storage/dev
-          git checkout master
-          git pull hp srijan --no-rebase
-=======
-          cd ~/storage/dev
           #fetching all branch to git runner to see locally
           git fetch --all
           #checking all fetched branch or confirming it
@@ -44,7 +38,6 @@ jobs:
           # git remote add hp git@github.com:Kewat-Ops/dev.git (for SSH)
           #git fetch hp
           git pull hp srijan
->>>>>>> 30a4287430ef7bc15dc304e9755c7a318c716c05
           git push hp master
           git checkout srijan
 
