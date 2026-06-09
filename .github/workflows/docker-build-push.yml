@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-# insnstalling dependencies cause its bare VM ubuntu
+# insnstalling dependencies cause its bare git runnerVM ubuntu
       - name: Installing python
         uses: actions/setup-python@v5
         with:
