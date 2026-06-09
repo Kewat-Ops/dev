@@ -37,7 +37,7 @@ jobs:
           git checkout master
           # since git runner didnt recognize "hp" remote we use standard <origin>, for custom we need to define "hp"
           # git remote add hp git@github.com:Kewat-Ops/dev.git (for SSH)
-          #git fetch hp
+          # git fetch hp
           git pull hp srijan
           git push hp master
           git checkout srijan
