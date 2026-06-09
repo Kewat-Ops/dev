@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-# synchronization branches
+  # synchronization branches
       #- name: synchronization with branches
        # run: |
           #fetching all branch to git runner to see locally
