@@ -23,7 +23,10 @@ jobs:
       - name: synchronization with branches
         run: |
           cd storage/dev
-          git checkout master && git pull hp srijan && git push hp master && git checkout srijan
+          git checkout master
+          git pull hp srijan --no-rebase
+          git push hp master
+          git checkout srijan
 
       - name: deploying code
         run: |
