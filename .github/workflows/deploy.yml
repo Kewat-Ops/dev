@@ -8,23 +8,43 @@ on:
 #    type: [completed]
 #  workflow_dispatch:
 
-
 jobs:
 
   deployment-phase:
-    runs-on: ubuntu-latest
- #   if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
+    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DEPLOY_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v4
 
-#synchronization branches
+      #Github requires SSH key to pull & push between repo branches( called deploy key)
+      - name: Github handeling SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+
+
+      # synchronizing branches
       - name: synchronization with branches
         run: |
+<<<<<<< HEAD
           cd storage/dev
           git checkout master
           git pull hp srijan --no-rebase
+=======
+          cd ~/storage/dev
+          #fetching all branch to git runner to see locally
+          git fetch --all
+          #checking all fetched branch or confirming it
+          git branch -a
+          git checkout master
+          # since git runner didnt recognize "hp" remote we use standard <origin>, for custom we need to define "hp"
+          # git remote add hp git@github.com:Kewat-Ops/dev.git (for SSH)
+          #git fetch hp
+          git pull hp srijan
+>>>>>>> 30a4287430ef7bc15dc304e9755c7a318c716c05
           git push hp master
           git checkout srijan
 
@@ -42,18 +62,28 @@ jobs:
           docker compose -f docker-compose.yml up -d --remove-orphans
 
 # Zero-downtime (Automated roll back ) & scaling
-      - name: rolling back to stable & scaling container
+      - name: Rolling back & scaling container on Health failure
         run: |
-          for SVC in python-service node-service go-service; do
-            status=$(docker inspect --format='{{json .State.Health.Status}}' $(docker ps -q -f name=$SVC))
-            if [[ '$status' != "\"healthy\"" ]]; then
-              echo -e " $SVC is unhealthy\nRolling back to stable..."
-              docker compose -f docker-compose.yml down -d
-              docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
-              # scaling container
-              docker compose -f docker-compose.yml up -d --scale ${SVC}=2
+          #here in loops we should use image name not container or service (docker_user/dev-python:dev-node:dev-go)
+          for SVC in python node go; do
+            # Logic for finding container id
+            cid=$(docker ps -q -f "label=com.docker.compose.service=$SVC-service")
+            # this logic checks if container id is found/running or empty (-n: non-empty, -z: empty) 
+            if [ -n "$cid" ]; then
+              # Logic for checking container health
+              status=$(docker inspect --format='{{json .State.Health.Status}}' $cid)
+              if [[ "$status" != "\"healthy\"" ]]; then
+                echo -e " $SVC is unhealthy\nRolling back to stable..."
+                # restart only the failing services,not whole stack (-s: stop, -f: force removal)
+                docker compose rm -sf ${SVC}-service
+                docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
+                # scaling container, brings service back with 2 replicas
+                docker compose -f docker-compose.yml up -d --scale ${SVC}-service=2
+              else
+                echo -e "$SVC container is healthy"
+              fi
             else
-              echo -e "$SVC container is healthy"
+              echo -e "$SVC-container is not running"
             fi
           done
 
