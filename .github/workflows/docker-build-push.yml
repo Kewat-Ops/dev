@@ -128,7 +128,7 @@ jobs:
           # use this below one only if pytest installed at runtime stage
           #docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-python:latest pytest
 
-          docker build -t python-tester --target-tester ./python-dir
+          docker build -t python-tester --target tester ./python-dir
           docker run --rm python-tester
 
       #pulling python images instead of building existing images
