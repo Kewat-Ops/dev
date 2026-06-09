@@ -1,5 +1,9 @@
 name: docker-build-push
 
+on:
+  push:
+    branches: [master]
+
 jobs:
 
   docker-build-push:
