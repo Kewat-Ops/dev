@@ -40,7 +40,7 @@ jobs:
           echo -e "Composing docker files....\nInitializing & untag unused images....."
           docker image prune -f
           echo -e "Succesfully untagged unused images...\nStart composing files..."
-          docker compose -f docker-compose.yml --profile runner up -d --remove-orphans
+          docker compose -f docker-compose.yml up -d --remove-orphans
 
 # Zero-downtime (Automated roll back ) & scaling
       - name: Rolling back & scaling container on Health failure
