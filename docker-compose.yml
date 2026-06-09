@@ -55,7 +55,7 @@ services:
   nginx-proxy:
     image: nginx:latest
     container_name: nginx-proxy
-    profiles: ["runner"]
+    #profiles: ["runner"]
     #network_mode: host
     ports:
       - "80:80"
