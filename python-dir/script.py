@@ -7,7 +7,11 @@ with open("/run/secrets/db_password") as f:
 # main script of apps with routing
 from flask import Flask
 
+# using prometheus exporter (like blackbox)
+from prometheus_flask_exporter import PrometheusMetrics
+
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 @app.route("/python")
 def hello():
