@@ -1,3 +1,10 @@
+# code to read secrets at runtime inside container
+with open("/run/secrets/db_password") as f:
+    db_pass = f.read().strip()
+    print("DB password:", db_pass)
+
+
+# main script of apps with routing
 from flask import Flask
 
 app = Flask(__name__)

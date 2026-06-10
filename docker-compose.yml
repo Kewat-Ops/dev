@@ -1,6 +1,12 @@
+# using for intra-services, communicating services eachother
 networks:
   devops-net:
     driver: bridge
+
+# using docker secrets for outside of github CI workflows, for multiple VM or multiple node
+secrets:
+  db_password:
+    external: true
 
 services:
 
@@ -20,6 +26,9 @@ services:
     networks:
       - devops-net
 
+    secrets:
+      - db_password
+
   node-service:
     build:
       context: ./node-dir
@@ -36,6 +45,9 @@ services:
     networks:
       - devops-net
 
+    secrets:
+      - db_password
+
   go-service:
     build:
       context: ./go-dir
@@ -51,6 +63,9 @@ services:
       retries: 2
     networks:
       - devops-net
+
+    secrets:
+      - db_password
 
   nginx-proxy:
     image: nginx:latest
