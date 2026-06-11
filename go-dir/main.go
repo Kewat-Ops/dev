@@ -7,6 +7,10 @@ import (
 
     "github.com/prometheus/client_golang/prometheus"
     "github.com/prometheus/client_golang/prometheus/promhttp"
+
+    "go.opentelemetry.io/otel"
+    "go.opentelemetry.io/otel/exporters/jaeger"
+    sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
 
 var dbPass string
@@ -18,8 +22,13 @@ var httpRequestsTotal = prometheus.NewCounter(
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
+    // Start a trace span
+    tracer := otel.Tracer("go-service")
+    _, span := tracer.Start(r.Context(), "helloHandler")
+    defer span.End()
+
     httpRequestsTotal.Inc()
-    fmt.Fprintf(w, "Hello from Go! Secret is: %s", dbPass)
+    fmt.Fprintf(w, "Hello from Go with tracing! Secret is: %s", dbPass)
 }
 
 func main() {
@@ -30,14 +39,23 @@ func main() {
     }
     dbPass = string(data)
 
-    // Register metrics
+    // Prometheus metrics
     prometheus.MustRegister(httpRequestsTotal)
+    http.Handle("/metrics", promhttp.Handler())
+
+    // OpenTelemetry Jaeger exporter
+    exp, err := jaeger.New(jaeger.WithAgentEndpoint(
+        jaeger.WithAgentHost("jaeger"),
+        jaeger.WithAgentPort("6831"),
+    ))
+    if err != nil {
+        panic(err)
+    }
+    tp := sdktrace.NewTracerProvider(sdktrace.WithBatcher(exp))
+    otel.SetTracerProvider(tp)
 
     // App route
     http.HandleFunc("/go", helloHandler)
-
-    // Metrics endpoint
-    http.Handle("/metrics", promhttp.Handler())
 
     fmt.Println("Go service running on port 8000")
     http.ListenAndServe("0.0.0.0:8000", nil)
