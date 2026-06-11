@@ -16,6 +16,17 @@ services:
       context: ./python-dir
       dockerfile: dockerfile-python
     container_name: python-container
+
+    # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on_failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start_first
+
     ports:
       - "5000:5000"
 #checking python-container health
@@ -35,6 +46,17 @@ services:
       context: ./node-dir
       dockerfile: dockerfile-node
     container_name: node-container
+
+    # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on_failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start_first
+
     ports:
       - "3000:3000"
 #checking node-container health
@@ -54,6 +76,17 @@ services:
       context: ./go-dir
       dockerfile: dockerfile-go
     container_name: go-container
+
+    # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on_failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start_first
+
     ports:
       - "8000:8000"
 #checking go-container health
