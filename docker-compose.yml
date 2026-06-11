@@ -12,9 +12,13 @@ secrets:
 services:
 
   python-service:
-    build:
-      context: ./python-dir
-      dockerfile: dockerfile-python
+    # build is for locally and save images in pc
+    #build:
+    #  context: ./python-dir
+    #  dockerfile: dockerfile-python
+
+    # image field is for CICD github action, wont save images in pc
+    image: ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
     container_name: python-container
 
     # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
@@ -42,9 +46,13 @@ services:
       - db_password
 
   node-service:
-    build:
-      context: ./node-dir
-      dockerfile: dockerfile-node
+    # build is for locally and save images in pc
+    #build:
+    #  context: ./node-dir
+    #  dockerfile: dockerfile-node
+
+    # image field is for CICD github action, wont save images in pc
+    image: ${{ secrets.DOCKER_USERNAME }}/dev-node:latest
     container_name: node-container
 
     # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
@@ -72,9 +80,13 @@ services:
       - db_password
 
   go-service:
-    build:
-      context: ./go-dir
-      dockerfile: dockerfile-go
+    # build is for locally and save images in pc
+    #build:
+    # context: ./go-dir
+    # dockerfile: dockerfile-go
+
+    # image field is for CICD github action, wont save images in pc
+    image: ${{ secrets.DOCKER_USERNAME }}/dev-go:latest
     container_name: go-container
 
     # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
