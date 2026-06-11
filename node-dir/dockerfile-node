@@ -1,6 +1,6 @@
 # stage 1 -builder
 
-FROM node:18-alpine as builder
+FROM node:20-alpine as builder
 WORKDIR /docker-project
 COPY package*.json .
 RUN npm install --production
@@ -8,7 +8,7 @@ COPY . .
 
 # stage 2- Runtime
 
-FROM node:18-alpine
+FROM node:20-alpine
 WORKDIR /docker-project
 COPY --from=builder /docker-project .
 RUN apk add --no-cache curl
