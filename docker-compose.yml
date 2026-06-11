@@ -31,6 +31,18 @@ services:
         delay: 10s
         order: start_first
 
+      # using resource limits, so that replicas wont starve each-other under load
+      resources:
+        # max 50% of cpu core
+        cpus: "0.50"
+        # max 512 MB of RAM
+        memory: "512M"
+      reservations:
+        # gurantee 50% of cpu core
+        cpus: "0.25"
+        # gurantee 512 MB of RAM
+        memory: "256M"
+
     ports:
       - "5000:5000"
 #checking python-container health
@@ -65,6 +77,18 @@ services:
         delay: 10s
         order: start_first
 
+      # using resource limits, so that replicas wont starve each-other under load
+      resources:
+        # max 50% of cpu core
+        cpus: "0.50"
+        # max 512 MB of RAM
+        memory: "512M"
+      reservations:
+        # gurantee 50% of cpu core
+        cpus: "0.25"
+        # gurantee 512 MB of RAM
+        memory: "256M"
+
     ports:
       - "3000:3000"
 #checking node-container health
@@ -98,6 +122,18 @@ services:
         parallelism: 1
         delay: 10s
         order: start_first
+
+      # using resource limits, so that replicas wont starve each-other under load
+      resources:
+        # max 50% of cpu core
+        cpus: "0.50"
+        # max 512 MB of RAM
+        memory: "512M"
+      reservations:
+        # gurantee 50% of cpu core
+        cpus: "0.25"
+        # gurantee 512 MB of RAM
+        memory: "256M"
 
     ports:
       - "8000:8000"
