@@ -1,7 +1,7 @@
 # using for intra-services, communicating services eachother
 networks:
   devops-net:
-    # using overlay cause swarm sees overlay rather than bridge, using this -we can communicate with multiple host-node
+    # using overlay , cause swarm sees overlay rather than bridge, using this -we can communicate with multiple host-node
     driver: overlay
 
 # using docker secrets for outside of github CI workflows, for multiple VM or multiple node
