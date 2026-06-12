@@ -121,7 +121,7 @@ services:
     deploy:
       replicas: 3
       restart_policy:
-        condition: on_failure
+        condition: on-failure
       update_config:
         parallelism: 1
         delay: 10s
@@ -158,7 +158,6 @@ services:
 # using reverse proxy
   nginx-proxy:
     image: nginx:latest
-    container_name: nginx-proxy
     ports:
       - "80:80"
     volumes:
