@@ -27,34 +27,30 @@ jobs:
           echo -e "Composing docker files....\nInitializing & untag unused images....."
           docker image prune -f
           echo -e "Succesfully untagged unused images...\nStart composing files..."
-          docker compose -f docker-compose.yml up -d --remove-orphans
+          docker stack deploy -c docker-compose.yml devstack --remove-orphans
 
-# Zero-downtime (Automated roll back ) & scaling
-      - name: Rolling back & scaling container on Health failure
+# Zero-downtime (Automated roll back ) & scaling in swarm mode
+      - name: Rolling back & scaling container on Health failure in swarm mode
         run: |
-          #here in loops we should use image name not container or service (docker_user/dev-python:dev-node:dev-go)
           for SVC in python node go; do
-            # Logic for finding container id
-            cid=$(docker ps -q -f "label=com.docker.compose.service=$SVC-service")
-            # this logic checks if container id is found/running or empty (-n: non-empty, -z: empty) 
-            if [ -n "$cid" ]; then
-              # Logic for checking container health
-              status=$(docker inspect --format='{{json .State.Health.Status}}' $cid)
-              if [[ "$status" != "\"healthy\"" ]]; then
-                echo -e " $SVC is unhealthy\nRolling back to stable..."
-                # restart only the failing services,not whole stack (-s: stop, -f: force removal)
-                docker compose rm -sf ${SVC}-service
-                docker pull ${{ secrets.DOCKER_USERNAME }}/dev-${SVC}:stable
-                # scaling container, brings service back with 2 replicas
-                docker compose -f docker-compose.yml up -d --scale ${SVC}-service=2
+            echo "$SVC - service is running"
+            # checking if service exist
+            if docker service ls --format '{{.Name}}' | grep -q "devstack_$SVC-service"; then
+              unhealthy=$(docker service ps devstack_$SVC-service \
+                 --filter "desired-state=running" \
+                 --format "{{.CurrentState}}" | grep -v "Running")
+              if [ -n "$unhealthy" ]; then
+                echo "$SVC service is unhealthy\n Rolling back to stable image...."
+                # Roll back to stable
+                docker service update --rollback devstack_${SVC}-service
+                # scale service
+                docker service scale devstack_${SVC}-service=2
               else
-                echo -e "$SVC container is healthy"
+                echo "$SVC service is healthy"
               fi
             else
-              echo -e "$SVC-container is not running"
-            fi
+              echo "$SVC service is not running"
           done
-
   alert:
     runs-on: ubuntu-latest
     needs: [deployment-phase]
