@@ -166,12 +166,9 @@ services:
 
 # unless all containers are healthy, nginx-proxy service won't starts
     depends_on:
-      python-service:
-        condition: service_healthy
-      node-service:
-        condition: service_healthy
-      go-service:
-        condition: service_healthy
+      - python-service
+      - node-service
+      - go-service
     networks:
       - devops-net
 
