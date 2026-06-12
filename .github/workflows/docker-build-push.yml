@@ -2,7 +2,11 @@ name: docker-build-push
 
 on:
   push:
+<<<<<<< HEAD
     branches: [master]
+=======
+    branches: [srijan]
+>>>>>>> 1cd5fd54627a5a7160546938cdc1bc8a50789cca
 
 jobs:
 
@@ -102,6 +106,7 @@ jobs:
           context: ./python-dir
           file: ./python-dir/dockerfile-python
           push: true
+          load: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/dev-python:latest
             ${{ secrets.DOCKER_USERNAME }}/dev-python:${{ github.sha }}
@@ -123,6 +128,9 @@ jobs:
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-python:latest
           severity: HIGH, CRITICAL
+          vuln-type: os, library
+          format: table
+          ignore-unfixed: fasle
 
 # Testing & promoting python-image stable for production ready & safety from broken builds
       - name: Testing python container
@@ -131,7 +139,11 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
           pytest tests
+          # use this below one only if pytest installed at runtime stage
           #docker run --rm ${{ secrets.DOCKER_USERNAME }}/dev-python:latest pytest
+          #below is target based testing
+          #docker build -t python-tester --target tester ./python-dir/dockerfile-python
+          #docker run --rm python-tester
 
       #pulling python images instead of building existing images
       - name: Pulling python images
@@ -172,6 +184,9 @@ jobs:
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-node:latest
           severity: HIGH, CRITICAL
+          vuln-type: os, library
+          format: table
+          ignore-unfixed: fasle
 
 # Testing & promoting node-image stable for production ready & safety from broken builds
       - name: Testing node container
@@ -220,6 +235,9 @@ jobs:
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-go:latest
           severity: HIGH, CRITICAL
+          vuln-type: os, library
+          format: table
+          ignore-unfixed: fasle
 
 # Testing & promoting go-image stable for production ready & safety from broken builds
       - name: Testing go container

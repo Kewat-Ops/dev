@@ -1,14 +1,56 @@
+# using for intra-services, communicating services eachother
 networks:
   devops-net:
-    driver: bridge
+    # using overlay , cause swarm sees overlay rather than bridge, using this -we can communicate with multiple host-node
+    driver: overlay
+
+# using docker secrets for outside of github CI workflows, for multiple VM or multiple node
+secrets:
+  db_password:
+    external: true
 
 services:
 
   python-service:
+<<<<<<< HEAD
     build:
       context: ./python-dir
       dockerfile: dockerfile-python
     container_name: python-container
+=======
+    # build is for locally and save images in pc
+    #build:
+    #  context: ./python-dir
+    #  dockerfile: dockerfile-python
+
+    # image field is for CICD github action, wont save images in pc
+    image: ${DOCKER_USERNAME}/dev-python:latest
+    container_name: python-container
+
+    # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on_failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start_first
+
+      # using resource limits, so that replicas wont starve each-other under load
+      resources:
+        limits:
+          # max 50% of cpu core
+          cpus: "0.50"
+          # max 512 MB of RAM
+          memory: "512M"
+        reservations:
+          # gurantee 50% of cpu core
+          cpus: "0.25"
+          # gurantee 512 MB of RAM
+          memory: "256M"
+
+>>>>>>> 1cd5fd54627a5a7160546938cdc1bc8a50789cca
     ports:
       - "5000:5000"
 #checking python-container health
@@ -20,11 +62,49 @@ services:
     networks:
       - devops-net
 
+    secrets:
+      - db_password
+
   node-service:
+<<<<<<< HEAD
     build:
       context: ./node-dir
       dockerfile: dockerfile-node
     container_name: node-container
+=======
+    # build is for locally and save images in pc
+    #build:
+    #  context: ./node-dir
+    #  dockerfile: dockerfile-node
+
+    # image field is for CICD github action, wont save images in pc
+    image: ${DOCKER_USERNAME}/dev-node:latest
+    container_name: node-container
+
+    # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on_failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start_first
+
+      # using resource limits, so that replicas wont starve each-other under load
+      resources:
+        limits:
+          # max 50% of cpu core
+          cpus: "0.50"
+          # max 512 MB of RAM
+          memory: "512M"
+        reservations:
+          # gurantee 50% of cpu core
+          cpus: "0.25"
+          # gurantee 512 MB of RAM
+          memory: "256M"
+
+>>>>>>> 1cd5fd54627a5a7160546938cdc1bc8a50789cca
     ports:
       - "3000:3000"
 #checking node-container health
@@ -36,11 +116,49 @@ services:
     networks:
       - devops-net
 
+    secrets:
+      - db_password
+
   go-service:
+<<<<<<< HEAD
     build:
       context: ./go-dir
       dockerfile: dockerfile-go
     container_name: go-container
+=======
+    # build is for locally and save images in pc
+    #build:
+    # context: ./go-dir
+    # dockerfile: dockerfile-go
+
+    # image field is for CICD github action, wont save images in pc
+    image: ${DOCKER_USERNAME}/dev-go:latest
+    container_name: go-container
+
+    # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on_failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start_first
+
+      # using resource limits, so that replicas wont starve each-other under load
+      resources:
+        limits:
+          # max 50% of cpu core
+          cpus: "0.50"
+          # max 512 MB of RAM
+          memory: "512M"
+        reservations:
+          # gurantee 50% of cpu core
+          cpus: "0.25"
+          # gurantee 512 MB of RAM
+          memory: "256M"
+
+>>>>>>> 1cd5fd54627a5a7160546938cdc1bc8a50789cca
     ports:
       - "8000:8000"
 #checking go-container health
@@ -52,6 +170,10 @@ services:
     networks:
       - devops-net
 
+    secrets:
+      - db_password
+
+# using reverse proxy
   nginx-proxy:
     image: nginx:latest
     container_name: nginx-proxy
@@ -59,6 +181,8 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+# unless all containers are healthy, nginx-proxy service won't starts
     depends_on:
       python-service:
         condition: service_healthy
@@ -66,5 +190,34 @@ services:
         condition: service_healthy
       go-service:
         condition: service_healthy
+    networks:
+      - devops-net
+
+# using prometheus for storing metrics, behaves like blackbox
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - devops-net
+
+#using grafana to visualize metrics with dashboard layer, graphical visualization
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3001:3000"
+    networks:
+      - devops-net
+
+# using jaeger for troubleshooter- tells where and why happened
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      # jaeger UI
+      - "16686:16686"
+      # Agent
+      - "6831:6831/udp"
     networks:
       - devops-net

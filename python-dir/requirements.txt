@@ -1,3 +1,5 @@
 Flask
 uvicorn
 Fastapi
+opentelemetry-instrumentation-flask
+opentelemetry-exporter-jaeger

@@ -1,18 +1,25 @@
 name: Deployment phase
 
 on:
+<<<<<<< HEAD
   push:
     branches: [srijan]
 #  workflow_run:
 #    workflows: ["docker-build-push"]
 #    type: [completed]
 #  workflow_dispatch:
+=======
+  workflow_run:
+    workflows: ["docker-build-push"]
+    type: [completed]
+  workflow_dispatch:
+>>>>>>> 1cd5fd54627a5a7160546938cdc1bc8a50789cca
 
 jobs:
 
   deployment-phase:
     runs-on: self-hosted
-    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     steps:
