@@ -29,7 +29,7 @@ services:
       update_config:
         parallelism: 1
         delay: 10s
-        order: start_first
+        order: start-first
         failure_action: rollback
 
       # using resource limits, so that replicas wont starve each-other under load
@@ -77,7 +77,7 @@ services:
       update_config:
         parallelism: 1
         delay: 10s
-        order: start_first
+        order: start-first
         failure_action: rollback
 
       # using resource limits, so that replicas wont starve each-other under load
@@ -125,7 +125,7 @@ services:
       update_config:
         parallelism: 1
         delay: 10s
-        order: start_first
+        order: start-first
         failure_action: rollback
 
       # using resource limits, so that replicas wont starve each-other under load
