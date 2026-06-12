@@ -27,7 +27,7 @@ jobs:
           echo -e "Composing docker files....\nInitializing & untag unused images....."
           docker image prune -f
           echo -e "Succesfully untagged unused images...\nStart composing files..."
-          docker stack deploy -c docker-compose.yml devstack --remove-orphans
+          docker stack deploy -c docker-compose.yml devstack
 
 # Zero-downtime (Automated roll back ) & scaling in swarm mode
       - name: Rolling back & scaling container on Health failure in swarm mode
