@@ -30,6 +30,7 @@ services:
         parallelism: 1
         delay: 10s
         order: start_first
+        failure_action: rollback
 
       # using resource limits, so that replicas wont starve each-other under load
       resources:
@@ -77,6 +78,7 @@ services:
         parallelism: 1
         delay: 10s
         order: start_first
+        failure_action: rollback
 
       # using resource limits, so that replicas wont starve each-other under load
       resources:
@@ -124,6 +126,7 @@ services:
         parallelism: 1
         delay: 10s
         order: start_first
+        failure_action: rollback
 
       # using resource limits, so that replicas wont starve each-other under load
       resources:
