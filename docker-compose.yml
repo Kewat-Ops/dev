@@ -19,7 +19,7 @@ services:
 
     # image field is for CICD github action, wont save images in pc
     image: ${DOCKER_USERNAME}/dev-python:latest
-    container_name: python-container
+    #container_name: python-container
 
     # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
     deploy:
@@ -67,7 +67,7 @@ services:
 
     # image field is for CICD github action, wont save images in pc
     image: ${DOCKER_USERNAME}/dev-node:latest
-    container_name: node-container
+    #container_name: node-container
 
     # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
     deploy:
@@ -115,7 +115,7 @@ services:
 
     # image field is for CICD github action, wont save images in pc
     image: ${DOCKER_USERNAME}/dev-go:latest
-    container_name: go-container
+    #container_name: go-container
 
     # In CICD script already added scaling services for stable image tag, we again adding here for handles scaling
     deploy:
