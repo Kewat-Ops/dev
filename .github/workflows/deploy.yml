@@ -52,6 +52,7 @@ jobs:
               fi
             else
               echo "$SVC service is not running"
+            fi
           done
   alert:
     runs-on: ubuntu-latest
