@@ -38,9 +38,7 @@ jobs:
             echo "$SVC - service is running"
             # checking if service exist
             if docker service ls --format '{{.Name}}' | grep -q "devstack_$SVC-service"; then
-              unhealthy=$(docker service ps devstack_$SVC-service \
-                 --filter "desired-state=running" \
-                 --format "{{.CurrentState}}" | grep -v "Running")
+              unhealthy=$(docker service ps devstack_$SVC-service --filter "desired-state=running" --format "{{.CurrentState}}" | grep -v "Running")
               if [ -n "$unhealthy" ]; then
                 echo "$SVC service is unhealthy\n Rolling back to stable image...."
                 # Roll back to stable
