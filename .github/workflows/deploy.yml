@@ -34,17 +34,22 @@ jobs:
 # Zero-downtime (Automated roll back ) & scaling in swarm mode
       - name: Rolling back & scaling container on Health failure in swarm mode
         run: |
+          set -euo pipefail
           for SVC in python node go; do
             echo "$SVC - service is running"
-            # checking if service exist
-            if docker service ls --format '{{.Name}}' | grep -q "devstack_$SVC-service"; then
-              unhealthy=$(docker service ps devstack_$SVC-service --filter "desired-state=running" --format "{{.CurrentState}}" | grep -v "Running")
+            if docker service ls --format '{{.Name}}' | grep -q "devstack_${SVC}-service"; then
+              unhealthy=$(docker service ps devstack_${SVC}-service \
+                --filter "desired-state=running" \
+                --format "{{.CurrentState}}" | grep -v "Running" || true)
+
               if [ -n "$unhealthy" ]; then
-                echo "$SVC service is unhealthy\n Rolling back to stable image...."
-                # Roll back to stable
-                docker service update --rollback devstack_${SVC}-service
-                # scale service
-                docker service scale devstack_${SVC}-service=2
+                echo "$SVC service is unhealthy → attempting rollback..."
+                if ! docker service update --rollback devstack_${SVC}-service; then
+                  echo "Rollback not available for $SVC"
+                fi
+                if ! docker service scale devstack_${SVC}-service=2; then
+                  echo "Scaling failed for $SVC"
+                fi
               else
                 echo "$SVC service is healthy"
               fi
@@ -52,6 +57,10 @@ jobs:
               echo "$SVC service is not running"
             fi
           done
+
+
+
+
   alert:
     runs-on: ubuntu-latest
     needs: [deployment-phase]
