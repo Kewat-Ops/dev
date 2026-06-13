@@ -4,7 +4,7 @@ networks:
     # using overlay , cause swarm sees overlay rather than bridge, using this -we can communicate with multiple host-node
     driver: overlay
 
-  # using docker secrets for outside of github CI workflows, for multiple VM or multiple node
+   # using docker secrets for outside of github CI workflows, for multiple VM or multiple node
 secrets:
   db_password:
     external: true
