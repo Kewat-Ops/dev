@@ -3,3 +3,4 @@ uvicorn
 Fastapi
 opentelemetry-instrumentation-flask
 opentelemetry-exporter-jaeger
+prometheus-flask-exporter

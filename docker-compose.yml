@@ -160,12 +160,14 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "80:80"
 
 # unless all containers are healthy, nginx-proxy service won't starts
-    depends_on:
-      - python-service
-      - node-service
-      - go-service
+    #depends_on:
+      #- python-service
+      #- node-service
+      #- go-service
     networks:
       - devops-net
 
