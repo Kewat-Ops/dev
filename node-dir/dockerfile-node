@@ -1,5 +1,5 @@
 # stage 1 - builder
-FROM node:20-alpine AS builder
+FROM node:20-slim AS builder
 WORKDIR /docker-project
 COPY package*.json ./
 # Install ALL dependencies to make sure OpenTelemetry components build properly
@@ -7,7 +7,7 @@ RUN npm install
 COPY . .
 
 # stage 2 - Runtime
-FROM node:20-alpine
+FROM node:20-slim
 WORKDIR /docker-project
 # Explicitly grab the compiled application and node_modules from builder
 COPY --from=builder /docker-project /docker-project
