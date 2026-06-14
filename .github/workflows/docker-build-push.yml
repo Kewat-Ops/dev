@@ -115,7 +115,7 @@ jobs:
 
 # python-imgae scanning for vulnerabilities for issue
       - name: Scanning python images
-        uses: aquasecurity/trivy-action@v0.2.0
+        uses: aquasecurity/trivy-action@v0.71.1
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-python:latest
           severity: HIGH, CRITICAL
@@ -173,7 +173,7 @@ jobs:
 
 # node-imgae scanning for vulnerabilities for issue
       - name: Scanning node images
-        uses: aquasecurity/trivy-action@v0.2.0
+        uses: aquasecurity/trivy-action@v0.71.1
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-node:latest
           severity: HIGH, CRITICAL
@@ -226,7 +226,7 @@ jobs:
 
 # go-imgae scanning for vulnerabilities for issue
       - name: Scanning go images
-        uses: aquasecurity/trivy-action@v0.2.0
+        uses: aquasecurity/trivy-action@v0.71.1
         with:
           image-ref: ${{ secrets.DOCKER_USERNAME}}/dev-go:latest
           severity: HIGH, CRITICAL
